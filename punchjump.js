@@ -375,7 +375,6 @@ function update(timestamp) {
 
     // --- Score ---
     updateScore(dt);
-    drawScoreBadge();
 
     // SDK points
     if (score > 0 && score - lastPointsSent >= POINTS_SEND_INTERVAL) {
@@ -480,23 +479,7 @@ function updateScore(dt) {
 // ============================================================
 // SCORE BADGE
 // ============================================================
-function drawScoreBadge() {
-    context.fillStyle = 'rgba(255, 248, 240, 0.82)';
-    context.beginPath();
-    context.roundRect(6, 6, 120, 46, 10);
-    context.fill();
-
-    context.fillStyle = '#c0522a';
-    context.font = 'bold 17px "Segoe UI", sans-serif';
-    context.shadowColor = 'rgba(0,0,0,0.15)';
-    context.shadowBlur = 2;
-    context.fillText('\u{1F412} ' + score, 14, 26);
-
-    context.font = '12px "Segoe UI", sans-serif';
-    context.fillStyle = '#a06040';
-    context.fillText('Best: ' + highScore, 14, 44);
-    context.shadowBlur = 0;
-}
+// drawScoreBadge removed — Play.fun widget handles score display
 
 // ============================================================
 // GAME OVER

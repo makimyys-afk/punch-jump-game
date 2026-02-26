@@ -114,7 +114,7 @@ body {
 /* ===== Volume Control ===== */
 #volume-control {
     position: absolute;
-    top: 12px;
+    bottom: 12px;
     right: 12px;
     display: flex;
     align-items: center;
