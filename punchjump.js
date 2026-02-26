@@ -35,24 +35,40 @@ function sendPointsToSDK(points) {
 async function endGameSDK(finalScore) {
     // Hybrid: submit final score via server for Game Integrity
     try {
-        // Get session token from client SDK
         let sessionToken = null;
+        let playerId = null;
+
         if (ogp && sdkReady) {
+            // Try to get session token
             try { sessionToken = await ogp.sessionToken(); } catch(e) {}
+            // Try to get player/user info for playerId
+            try {
+                const user = await ogp.user();
+                if (user) {
+                    // Prefer ogpId, then solana wallet, then privy id
+                    playerId = user.ogpId || user.id ||
+                        (user.wallet?.address ? 'sol:' + user.wallet.address : null) ||
+                        (user.privyId ? user.privyId : null);
+                }
+            } catch(e) {}
         }
 
-        if (sessionToken && finalScore > 0) {
-            // Server-side points submission
-            const resp = await fetch(SERVER_URL + '/submit-points', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sessionToken, points: finalScore }),
-            });
-            const data = await resp.json();
-            if (data.success) {
-                console.log('[Play.fun] Server saved', data.savedCount, 'points');
-            } else {
-                console.warn('[Play.fun] Server error:', data.error);
+        // Submit to server if we have a player identifier
+        if ((sessionToken || playerId) && finalScore > 0) {
+            try {
+                const resp = await fetch(SERVER_URL + '/api/submit-points', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionToken, playerId, points: finalScore }),
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    console.log('[Play.fun] Server saved', data.savedCount, 'points');
+                } else {
+                    console.warn('[Play.fun] Server error:', data.error);
+                }
+            } catch(fetchErr) {
+                console.warn('[Play.fun] Server fetch error:', fetchErr);
             }
         }
 
