@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Punch Jump! 🐒</title>
+
+    <!-- Play.fun API Key (replace with your actual key after registration) -->
+    <meta name="x-ogp-key" content="72d6ae03-34c4-4383-b2da-aa02bae1ef23">
+
+    <link rel="stylesheet" href="punchjump.css">
+
+    <!-- Play.fun SDK -->
+    <script src="https://sdk.play.fun"></script>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="board"></canvas>
+
+        <!-- Volume Control -->
+        <div id="volume-control">
+            <button id="volume-btn" title="Toggle sound">🔊</button>
+            <input type="range" id="volume-slider" min="0" max="100" value="50" title="Volume">
+        </div>
+
+        <!-- Background Music -->
+        <audio id="bg-music" src="bgmusic.mp3" loop preload="auto"></audio>
+
+        <div id="game-over-overlay" style="display:none;">
+            <div id="game-over-box">
+                <div id="game-over-icon">🐒</div>
+                <h2>Oh no, Punch!</h2>
+                <p>Score: <span id="final-score">0</span></p>
+                <button id="restart-btn">Try Again!</button>
+            </div>
+        </div>
+    </div>
+    <script src="punchjump.js"></script>
+</body>
+</html>

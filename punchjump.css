@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    touch-action: none;
+    background: radial-gradient(ellipse at center, #fde8d8 0%, #d4e8c2 100%);
+}
+
+#game-container {
+    position: relative;
+    display: inline-block;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(139, 90, 43, 0.25);
+}
+
+#board {
+    display: block;
+    background-image: url("./punchbg.png");
+    background-size: cover;
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(210, 140, 80, 0.4);
+}
+
+/* Game Over Overlay */
+#game-over-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(80, 40, 10, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    z-index: 10;
+    backdrop-filter: blur(3px);
+}
+
+#game-over-box {
+    background: linear-gradient(135deg, #fff8f0, #ffe8cc);
+    border: 3px solid #d4845a;
+    border-radius: 20px;
+    padding: 32px 40px;
+    text-align: center;
+    color: #5a3020;
+    box-shadow: 0 0 40px rgba(210, 140, 80, 0.4), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+#game-over-icon {
+    font-size: 52px;
+    margin-bottom: 8px;
+    animation: bounce 0.6s ease infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-8px); }
+}
+
+#game-over-box h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: #c0522a;
+    font-weight: 800;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+#game-over-box p {
+    font-size: 17px;
+    margin-bottom: 22px;
+    color: #7a4a30;
+}
+
+#game-over-box #final-score {
+    font-size: 34px;
+    font-weight: bold;
+    color: #c0522a;
+}
+
+#restart-btn {
+    background: linear-gradient(135deg, #e8834a, #c0522a);
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(192, 82, 42, 0.4);
+}
+
+#restart-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 20px rgba(192, 82, 42, 0.5);
+}
+
+#restart-btn:active {
+    transform: scale(0.97);
+}
+
+/* ===== Volume Control ===== */
+#volume-control {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 20;
+    background: rgba(255, 248, 240, 0.85);
+    padding: 6px 12px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(139, 90, 43, 0.2);
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+}
+
+#volume-control:hover {
+    opacity: 1 !important;
+}
+
+#volume-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 2px;
+    line-height: 1;
+    transition: transform 0.15s ease;
+}
+
+#volume-btn:hover {
+    transform: scale(1.15);
+}
+
+#volume-btn:active {
+    transform: scale(0.95);
+}
+
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #e8834a 0%, #e8834a 50%, #ddd 50%, #ddd 100%);
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8834a, #c0522a);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(192, 82, 42, 0.4);
+    transition: transform 0.15s ease;
+}
+
+#volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8834a, #c0522a);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 4px rgba(192, 82, 42, 0.4);
+}
