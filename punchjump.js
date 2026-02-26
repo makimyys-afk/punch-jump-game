@@ -15,7 +15,7 @@ function initPlayFunSDK() {
     try {
         if (typeof OpenGameSDK !== 'undefined') {
             ogp = new OpenGameSDK({ ui: { usePointsWidget: true, theme: 'light' } });
-            ogp.init({ gameId: 'punch-jump' });
+            ogp.init({ gameId: '191135f4-298e-4ed0-8046-85ab90922974' });
             ogp.on('OnReady', () => { sdkReady = true; });
         }
     } catch (err) { console.warn('[Play.fun] SDK init error:', err); }
