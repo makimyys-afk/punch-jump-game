@@ -6,7 +6,7 @@
 
 // --- Play.fun SDK (Hybrid Integration) ---
 // Client SDK handles auth/UI, Server SDK handles point submission
-const SERVER_URL = 'https://3001-i2ko0jkyb55u1qksenn6k-b7adcb63.us2.manus.computer';
+const SERVER_URL = 'https://punch-jump-server.vercel.app';
 
 let ogp = null;
 let sdkReady = false;
