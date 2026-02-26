@@ -4,7 +4,10 @@
 // Fixed: deltaTime-based game loop, background music, volume control
 // ============================================================
 
-// --- Play.fun SDK ---
+// --- Play.fun SDK (Hybrid Integration) ---
+// Client SDK handles auth/UI, Server SDK handles point submission
+const SERVER_URL = 'https://3001-i2ko0jkyb55u1qksenn6k-b7adcb63.us2.manus.computer';
+
 let ogp = null;
 let sdkReady = false;
 let pointsSentThisRound = 0;
@@ -16,22 +19,53 @@ function initPlayFunSDK() {
         if (typeof OpenGameSDK !== 'undefined') {
             ogp = new OpenGameSDK({ ui: { usePointsWidget: true, theme: 'light' } });
             ogp.init({ gameId: '191135f4-298e-4ed0-8046-85ab90922974' });
-            ogp.on('OnReady', () => { sdkReady = true; });
+            ogp.on('OnReady', () => { sdkReady = true; console.log('[Play.fun] SDK ready'); });
         }
     } catch (err) { console.warn('[Play.fun] SDK init error:', err); }
 }
 
 function sendPointsToSDK(points) {
+    // Client SDK: addPoints for live widget display only
     if (ogp && sdkReady && points > 0) {
         try { ogp.addPoints(points); pointsSentThisRound += points; }
         catch (err) { console.warn('[Play.fun] addPoints error:', err); }
     }
 }
 
-async function endGameSDK() {
-    if (ogp && sdkReady && pointsSentThisRound > 0) {
-        try { await ogp.endGame(); }
-        catch (err) { console.warn('[Play.fun] endGame error:', err); }
+async function endGameSDK(finalScore) {
+    // Hybrid: submit final score via server for Game Integrity
+    try {
+        // Get session token from client SDK
+        let sessionToken = null;
+        if (ogp && sdkReady) {
+            try { sessionToken = await ogp.sessionToken(); } catch(e) {}
+        }
+
+        if (sessionToken && finalScore > 0) {
+            // Server-side points submission
+            const resp = await fetch(SERVER_URL + '/submit-points', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionToken, points: finalScore }),
+            });
+            const data = await resp.json();
+            if (data.success) {
+                console.log('[Play.fun] Server saved', data.savedCount, 'points');
+            } else {
+                console.warn('[Play.fun] Server error:', data.error);
+            }
+        }
+
+        // Client SDK endGame for UI modal
+        if (ogp && sdkReady && pointsSentThisRound > 0) {
+            try { await ogp.endGame(); } catch (err) { console.warn('[Play.fun] endGame error:', err); }
+        }
+    } catch (err) {
+        console.warn('[Play.fun] endGameSDK error:', err);
+        // Fallback: client-only endGame
+        if (ogp && sdkReady && pointsSentThisRound > 0) {
+            try { await ogp.endGame(); } catch(e) {}
+        }
     }
 }
 
@@ -465,7 +499,7 @@ async function handleGameOver() {
 
     finalScoreEl.textContent = score;
     gameOverOverlay.style.display = 'flex';
-    await endGameSDK();
+    await endGameSDK(score);
 }
 
 function restartGame() {
